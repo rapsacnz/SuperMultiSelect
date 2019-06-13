@@ -1,0 +1,113 @@
+<aura:component>
+
+
+  <aura:attribute name="variant" type="String" default="" description="to hide label, add 'label-hidden' as a variant" />
+  <aura:attribute name="placeholder" type="String" default="Select an option..." />
+  <aura:attribute name="dropdownLength" type="Integer" default="5" />
+  <aura:attribute name="optionsInit" type="Object[]" default="[]" />
+  <aura:attribute name="value" type="String" description="semi-colon delimited string of values eg 'English;Russian;Chinese'" />
+  <aura:attribute name="popularOptions" type="Object[]" default="[]" />
+  <aura:attribute name="label" type="String" default="" />
+  <aura:attribute name="class" type="String" default="" />
+  <aura:attribute name="optionsDataTypePlural" type="String" default="Options" description="Plural name of data being displayed, ie 'States' or 'Cities'. Defaults to 'Options'" />
+  <aura:attribute name="addAlphaCategories" type="Boolean" default="false" />
+  <aura:attribute name="searchKeys" type="String[]" default="['value']" />
+
+  <!-- private attributes -->
+  <aura:attribute name="fullscreenStyle" type="String" default="width:100%;position:absolute;top:0;bottom:98px;left:0;right:0;background-color:#ffffff;z-index:9998" />
+  <aura:attribute name="isActive" type="Boolean" default="false" />
+  <aura:attribute name="showFilter" type="Boolean" default="false" />
+  <aura:attribute name="searchString" type="String" description="The search string to find." access="global" />
+
+  <aura:attribute name="optionsFull" type="Object[]" default="[{label:'opt1',value:'opt1'},{label:'opt2',value:'opt2'},{label:'opt3',value:'opt3'}]" />
+  <aura:attribute name="optionsFiltered" type="Object[]" default="[]" />
+  <aura:attribute name="optionsDisplay" type="Object[]" default="[]" />
+
+  <aura:attribute name="initialized" type="Boolean" default="false" />
+
+  <!-- aura handlers -->
+  <aura:handler name="init" value="{!this}" action="{!c.init}" />
+  <aura:handler name="change" value="{!v.optionsInit}" action="{!c.reInit}" />
+
+  <!-- aura methods -->
+  <aura:method name="updateSelectedItems" action="{!c.updateSelectedItems}" description="Allows the lookup to be reinitalized">
+  </aura:method>
+
+  <div class="{!v.isActive ? 'slds-p-around_large nce-fullscreen' : ''}" style="width:100%; ">
+
+    <div class="{!v.isActive ? 'slds-grid ' : ' slds-hide '}">
+      <div class="slds-col_bump-left">
+        <span>
+          <lightning:buttonIcon onclick="{!c.handleClose}" variant="bare" size="large" iconName="utility:close" alternativeText="Close" />
+        </span>
+      </div>
+    </div>
+
+    <div class="{!v.class + ' slds-form-element slds-shrink-none nce-search-section' }" style="width:100%;">
+      <label class="{!if (v.variant == 'label-hidden' , 'slds-hide' , 'slds-form-element__label nce-form-label')}" 
+             for="super-select-input">{!v.label} {! and( not (v.showFilter), v.isActive ) ? '&nbsp;(click below to filter)': ''}</label>
+      <div class="slds-form-element__control">
+        <div class="slds-combobox_container">
+          <div aura:id="main-div" class="slds-combobox slds-dropdown-trigger slds-dropdown-trigger_click " aria-expanded="false" aria-haspopup="listbox" role="combobox">
+            <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">
+
+              <aura:if isTrue="{! not(v.isActive)}">
+                <c:SimpleTagList value="{!v.value}" tagRemoved="{!c.handleTagRemoved}" tagContainerClick="{!c.handleClick}" />
+              </aura:if>
+
+              <aura:if isTrue="{! and(v.isActive, not(v.showFilter))}">
+                <c:SimpleTagList value="{!v.value}" tagRemoved="{!c.handleTagRemoved}" tagContainerClick="{!c.handleTagContainerClick}" border="false"/>
+              </aura:if>
+
+              <aura:if isTrue="{! and(v.isActive,v.showFilter) }">
+                <input type="text" id="super-select-input" class="slds-input slds-combobox__input nce-form-input" autoComplete="off" role="textbox" placeholder="{!v.placeholder}" onclick="{!c.handleClick}" aura:id="lookup" value="{!v.searchString}" oninput="{!c.handleOnInput}">{!v.searchString}</input>
+              </aura:if>
+
+              <span class="slds-icon_container slds-icon-utility-down slds-input__icon slds-input__icon_right">
+                <lightning:icon iconName="utility:down" size="x-small" class="slds-icon slds-icon slds-icon_x-small slds-icon-text-default" />
+              </span>
+            </div>
+
+            <div class="slds-dropdown  slds-dropdown_fluid nce-dropdown "  role="listbox">
+              <ul class="slds-listbox slds-listbox_vertical nce-dropdown-scrollable" role="presentation">
+                <aura:iteration items="{!v.optionsDisplay}" var="option">
+
+                  <li class="slds-listbox__item nce-list-item" role="presentation" onclick="{!c.handleSelection}" data-label="{!option.label}" data-value="{!option.value}" data-selected="{!option.selected}">
+                    <aura:if isTrue="{!option.isCategory ne true}">
+
+                      <!-- checkbox row -->
+                      <div class="{!' slds-media  slds-listbox__option_plain slds-media_small slds-listbox__option ' + (option.selected == true ? ' slds-is-selected' : '')}" role="option">
+                        <span class="slds-media__figure">
+                          <lightning:icon iconName="utility:check" size="x-small" class="slds-icon-utility-check slds-current-color slds-listbox__icon-selected slds-icon_container" />
+                        </span>
+
+                        <span class="slds-media__body">
+                          <span class="slds-truncate nce-dropdown-text" title="{!option.label}">&nbsp;{!option.label}</span>
+                        </span>
+                      </div>
+
+                      <!-- category row -->
+                      <aura:set attribute="else">
+                        <div class="slds-media__body slds-m-top_medium" style="width:100%">
+                          <div class="slds-truncate nce-dropdown-category" title="{!option.label}">&nbsp;{!option.label}</div>
+                        </div>
+
+                      </aura:set>
+                    </aura:if>
+
+                  </li>
+                </aura:iteration>
+              </ul>
+            </div>
+            <!-- style="padding-bottom:98px;overflow-y:auto;" -->
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="{!v.isActive ? ' nce-fixed-footer slds-text-align_center slds-align_absolute-center' : ' slds-hide '}">
+    <button onclick="{!c.handleClose}" class="slds-button nce-button slds-button_brand slds-m-bottom_large">DONE</button>
+  </div>
+</aura:component>

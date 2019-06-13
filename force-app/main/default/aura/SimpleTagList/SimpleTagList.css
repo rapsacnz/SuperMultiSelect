@@ -1,0 +1,50 @@
+.THIS .nce-pill {
+  border-radius: 4px;
+  background-color: #e2e5e7;
+}
+
+.THIS .nce-pill-li {
+  margin: 0.5px;
+}
+
+.THIS .nce-pill-li:first-child {
+  padding-left: 0px;
+}
+
+.THIS.nce-pill-container .nce-pill-li:first-child {
+  padding-left: 3px;
+  /*padding-right: 3px;*/
+}
+
+.THIS .nce-pill-text {
+  font-size: 14px;
+  font-weight: normal;
+  color: #6a7785;
+}
+
+.THIS.nce-pill-container-no-border {
+  font-size: 18px;
+  color: #697684;
+  min-height: 35px;
+  border-radius: 0px;
+  box-shadow: none;
+  background-color: #ffffff;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: solid 1px #abb2ba;
+}
+
+.THIS.nce-pill-container {
+  font-size: 18px;
+  color: #697684;
+  min-height: 35px;
+  border-radius: 4px;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.24);
+  background-color: #ffffff;
+  /*border: solid 1px #979797;*/
+}
+
+.THIS span .slds-button_icon-bare {
+  color: #6a7785;
+}

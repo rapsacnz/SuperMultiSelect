@@ -1,0 +1,35 @@
+<aura:component>
+
+  <aura:attribute name="value" type="String" description="semi-colon delimited string of values eg 'English;Russian;Chinese'" />
+  <aura:attribute name="initialized" type="Boolean" default="false" />
+
+  <aura:attribute name="border" type="Boolean" default="true" />
+
+  <!-- private attributes -->
+  <aura:attribute name="values" type="Object[]" default="[]" access="private"/>
+
+  <aura:handler name="init" value="{!this}" action="{!c.init}" />
+  <aura:handler name="change" value="{!v.value}" action="{!c.reInit}" />
+
+  <aura:registerEvent name="tagContainerClick" type="c:ComponentEvent" />
+  <aura:registerEvent name="tagRemoved" type="c:ComponentEvent" />
+
+  <div class="{! v.border ne false ? ' slds-pill_container nce-pill-container ' : ' slds-pill_container nce-pill-container-no-border '}" onclick="{!c.handleContainerClick}">
+  <ul class="slds-listbox slds-listbox_horizontal " role="listbox" aria-label="Selected Options:" aria-orientation="horizontal" >
+
+    <aura:iteration items="{!v.values}" var="tag">
+
+    <li class="slds-listbox-item nce-pill-li" role="presentation">
+      <span class="slds-pill nce-pill" role="option" tabindex="0" aria-selected="true">
+        <span class="slds-pill__label " title="{!tag}">{!tag}</span>
+        <span class="slds-icon_container slds-pill__remove" onclick="{!c.handleItemClick}" data-tag-name="{!tag}" title="Remove">
+          <lightning:buttonIcon variant="bare" size="large" iconName="utility:close" alternativeText="Remove" />
+        </span>
+      </span>
+    </li>
+
+  </aura:iteration>
+  </ul>
+</div>
+  
+</aura:component>

@@ -1,0 +1,74 @@
+.THIS .slds-button_icon-bare {
+  color: #00a7cc;
+}
+
+.THIS .nce-dropdown {
+  border: none;
+  box-shadow: none;
+
+  flex-grow: 1;
+  overflow: auto;
+}
+
+.THIS .nce-dropdown-text {
+  font-size: 18px;
+  color: #6a7785;
+}
+
+.THIS .nce-dropdown-category {
+  font-size: 18px;
+  color: #383c42;
+  border-bottom: solid 1px #eff1f3;
+  width: 100%;
+}
+
+.THIS.nce-fixed-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 98px;
+  z-index: 99999;
+  background-image: linear-gradient(to top, #fafafa, rgba(250, 250, 250, 0));
+}
+
+.THIS.nce-fullscreen {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 100;
+  left: 0;
+  right: 0;
+  background-color: #ffffff;
+  z-index: 99998;
+  display: flex;
+  flex-direction: column;
+  
+}
+
+.THIS .nce-search-section {
+  display: flex;
+  overflow-y: auto;
+  flex-grow: 1;
+  flex-direction: column;
+  /* for Firefox */
+  min-height: 0;
+}
+
+.THIS .nce-dropdown-scrollable {
+  flex-grow: 1;
+  overflow-y: auto;
+  /* for Firefox */
+  min-height: 0;
+}
+
+.THIS li.nce-list-item:last-child {
+  margin-bottom: 98px;
+  display: inline-block;
+  width: 100%;
+}
+
+.THIS .slds-media.slds-listbox__option_plain.slds-media_small.slds-listbox__option.slds-is-selected {
+  background-color: #ccecf3;
+}
